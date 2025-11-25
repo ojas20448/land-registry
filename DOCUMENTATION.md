@@ -695,7 +695,7 @@ docker ps --format "table {{.Names}}\t{{.Status}}"
 
 ---
 
-## 📞 Support
+##  Support
 
 For issues or questions:
 1. Check `TROUBLESHOOTING.md`
@@ -707,7 +707,7 @@ For issues or questions:
 
 ## 📄 License
 
-MIT License - Government of India Land Registry Project
+MIT License 
 
 ---
 
