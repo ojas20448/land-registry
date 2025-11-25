@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Mock data
-const mockParcels = {
+let mockParcels = {
   'MH-MUM-001': {
     landId: 'MH-MUM-001',
     surveyNumber: 'SUR-2024-MH-001',
@@ -76,6 +76,54 @@ const mockParcels = {
   },
 };
 
+const mockUsers = [
+  {
+    userId: 'USR-001',
+    name: 'Rajesh Kumar',
+    email: 'rajesh.kumar@example.com',
+    role: 'CITIZEN',
+    status: 'ACTIVE',
+    registeredDate: '2024-01-15T00:00:00Z',
+    parcelsOwned: 1,
+  },
+  {
+    userId: 'USR-002',
+    name: 'Tech Solutions Pvt Ltd',
+    email: 'contact@techsolutions.com',
+    role: 'CITIZEN',
+    status: 'ACTIVE',
+    registeredDate: '2024-02-20T00:00:00Z',
+    parcelsOwned: 1,
+  },
+  {
+    userId: 'USR-003',
+    name: 'Harpreet Singh',
+    email: 'harpreet.singh@example.com',
+    role: 'CITIZEN',
+    status: 'ACTIVE',
+    registeredDate: '2024-03-10T00:00:00Z',
+    parcelsOwned: 1,
+  },
+  {
+    userId: 'USR-004',
+    name: 'Anita Sharma',
+    email: 'anita.sharma@example.com',
+    role: 'CITIZEN',
+    status: 'ACTIVE',
+    registeredDate: '2024-04-05T00:00:00Z',
+    parcelsOwned: 1,
+  },
+  {
+    userId: 'ADM-001',
+    name: 'Admin User',
+    email: 'admin@landregistry.gov',
+    role: 'ADMIN',
+    status: 'ACTIVE',
+    registeredDate: '2024-01-01T00:00:00Z',
+    parcelsOwned: 0,
+  },
+];
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', mode: 'MOCK' });
@@ -116,6 +164,65 @@ app.get('/api/public/parcel/:landId', (req, res) => {
     return res.status(404).json({ success: false, error: 'Parcel not found' });
   }
   res.json({ success: true, data: parcel });
+});
+
+// Admin routes
+app.get('/api/v1/admin/stats', (req, res) => {
+  const parcels = Object.values(mockParcels);
+  const stats = {
+    totalParcels: parcels.length,
+    activeParcels: parcels.filter(p => p.status === 'ACTIVE').length,
+    disputedParcels: parcels.filter(p => p.hasDisputes).length,
+    mortgagedParcels: parcels.filter(p => p.status === 'MORTGAGED' || p.hasMortgages).length,
+    totalUsers: mockUsers.length,
+    recentTransactions: parcels.reduce((sum, p) => sum + p.ownershipHistoryCount, 0),
+  };
+  res.json({ success: true, data: stats });
+});
+
+app.get('/api/v1/admin/parcels', (req, res) => {
+  const parcels = Object.values(mockParcels);
+  res.json({ success: true, data: parcels });
+});
+
+app.get('/api/v1/admin/parcels/:landId', (req, res) => {
+  const parcel = mockParcels[req.params.landId];
+  if (!parcel) {
+    return res.status(404).json({ success: false, error: 'Parcel not found' });
+  }
+  res.json({ success: true, data: parcel });
+});
+
+app.post('/api/v1/admin/parcels', (req, res) => {
+  const newParcel = req.body;
+  mockParcels[newParcel.landId] = {
+    ...newParcel,
+    ownershipHistoryCount: 1,
+    hasDisputes: false,
+    hasMortgages: false,
+  };
+  res.json({ success: true, data: mockParcels[newParcel.landId] });
+});
+
+app.put('/api/v1/admin/parcels/:landId', (req, res) => {
+  const parcel = mockParcels[req.params.landId];
+  if (!parcel) {
+    return res.status(404).json({ success: false, error: 'Parcel not found' });
+  }
+  mockParcels[req.params.landId] = { ...parcel, ...req.body };
+  res.json({ success: true, data: mockParcels[req.params.landId] });
+});
+
+app.delete('/api/v1/admin/parcels/:landId', (req, res) => {
+  if (!mockParcels[req.params.landId]) {
+    return res.status(404).json({ success: false, error: 'Parcel not found' });
+  }
+  delete mockParcels[req.params.landId];
+  res.json({ success: true, message: 'Parcel deleted successfully' });
+});
+
+app.get('/api/v1/admin/users', (req, res) => {
+  res.json({ success: true, data: mockUsers });
 });
 
 // 404 handler

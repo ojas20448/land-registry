@@ -1,7 +1,14 @@
-import { Container, AppBar, Toolbar, Typography, Box } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Container, AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
 import ParcelSearch from './components/ParcelSearch';
+import AdminLayout from './components/AdminLayout';
+import PrivateRoute from './components/PrivateRoute';
+import AdminLogin from './pages/admin/AdminLogin';
+import Dashboard from './pages/admin/Dashboard';
+import ParcelManagement from './pages/admin/ParcelManagement';
+import UserManagement from './pages/admin/UserManagement';
 
-function App() {
+function CitizenPortal() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -9,7 +16,10 @@ function App() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             🏛️ Land Registry - Citizen Portal
           </Typography>
-          <Typography variant="body2">
+          <Button color="inherit" href="/admin/login">
+            Admin Login
+          </Button>
+          <Typography variant="body2" sx={{ ml: 2 }}>
             Powered by Blockchain
           </Typography>
         </Toolbar>
@@ -29,6 +39,31 @@ function App() {
         </Box>
       </Container>
     </Box>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<CitizenPortal />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <AdminLayout />
+            </PrivateRoute>
+          }
+        >
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="parcels" element={<ParcelManagement />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
