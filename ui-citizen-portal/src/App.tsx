@@ -7,6 +7,10 @@ import AdminLogin from './pages/admin/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
 import ParcelManagement from './pages/admin/ParcelManagement';
 import UserManagement from './pages/admin/UserManagement';
+import TransferManagement from './pages/admin/TransferManagement';
+import MortgageManagement from './pages/admin/MortgageManagement';
+import DisputeManagement from './pages/admin/DisputeManagement';
+import TransactionHistory from './pages/admin/TransactionHistory';
 
 function CitizenPortal() {
   return (
@@ -59,6 +63,10 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="parcels" element={<ParcelManagement />} />
           <Route path="users" element={<UserManagement />} />
+          <Route path="transfers" element={<TransferManagement />} />
+          <Route path="mortgages" element={<MortgageManagement />} />
+          <Route path="disputes" element={<DisputeManagement />} />
+          <Route path="transactions" element={<TransactionHistory />} />
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

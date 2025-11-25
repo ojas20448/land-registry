@@ -17,6 +17,10 @@ import {
   Dashboard as DashboardIcon,
   Landscape as LandscapeIcon,
   People as PeopleIcon,
+  SwapHoriz as TransferIcon,
+  AccountBalance as MortgageIcon,
+  Gavel as DisputeIcon,
+  History as HistoryIcon,
   ExitToApp as LogoutIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
@@ -42,6 +46,10 @@ const AdminLayout: React.FC = () => {
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin/dashboard' },
     { text: 'Parcel Management', icon: <LandscapeIcon />, path: '/admin/parcels' },
     { text: 'User Management', icon: <PeopleIcon />, path: '/admin/users' },
+    { text: 'Property Transfers', icon: <TransferIcon />, path: '/admin/transfers' },
+    { text: 'Mortgages', icon: <MortgageIcon />, path: '/admin/mortgages' },
+    { text: 'Disputes', icon: <DisputeIcon />, path: '/admin/disputes' },
+    { text: 'Transaction History', icon: <HistoryIcon />, path: '/admin/transactions' },
   ];
 
   const drawer = (
