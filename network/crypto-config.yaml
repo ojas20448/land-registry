@@ -1,0 +1,80 @@
+# Crypto configuration for Hyperledger Fabric Network
+# Generates X.509 certificates for all organizations
+
+OrdererOrgs:
+  - Name: Orderer
+    Domain: orderer.landregistry.gov.in
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+      - Hostname: orderer1
+      - Hostname: orderer2
+      - Hostname: orderer3
+      - Hostname: orderer4
+
+PeerOrgs:
+  # Revenue Department Organization
+  - Name: OrgRevenue
+    Domain: revenue.landregistry.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+    Users:
+      Count: 5
+
+  # Registration Department Organization
+  - Name: OrgRegistration
+    Domain: registration.landregistry.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+    Users:
+      Count: 5
+
+  # Bank Organization
+  - Name: OrgBank
+    Domain: bank.landregistry.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+    Users:
+      Count: 5
+
+  # GovTech Organization (NIC)
+  - Name: OrgGovTech
+    Domain: govtech.landregistry.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+    Users:
+      Count: 3
+
+  # Public Gateway Organization
+  - Name: OrgPublicGateway
+    Domain: public.landregistry.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+        - localhost
+    Users:
+      Count: 2
+
+  # Agriculture Department Organization
+  - Name: OrgAgri
+    Domain: agri.landregistry.gov.in
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+        - localhost
+    Users:
+      Count: 3

@@ -1,0 +1,5 @@
+﻿{
+    "tls_required":  false,
+    "dial_timeout":  "10s",
+    "address":  "chaincode-server:9999"
+}

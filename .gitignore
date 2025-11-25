@@ -1,0 +1,9 @@
+﻿node_modules/
+dist/
+*.log
+bin/
+.env
+.env.local
+.env.*.local
+network/organizations/
+network/channel-artifacts/

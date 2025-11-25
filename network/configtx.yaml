@@ -1,0 +1,264 @@
+# Hyperledger Fabric Network Configuration
+# Defines organizations, orderer configuration, consortium, and channel policies
+
+---
+Organizations:
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+    OrdererEndpoints:
+      - orderer0.orderer.landregistry.gov.in:7050
+      - orderer1.orderer.landregistry.gov.in:7051
+      - orderer2.orderer.landregistry.gov.in:7052
+      - orderer3.orderer.landregistry.gov.in:7053
+      - orderer4.orderer.landregistry.gov.in:7054
+
+  - &OrgRevenue
+    Name: OrgRevenueMSP
+    ID: OrgRevenueMSP
+    MSPDir: ./organizations/peerOrganizations/revenue.landregistry.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrgRevenueMSP.admin', 'OrgRevenueMSP.peer', 'OrgRevenueMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrgRevenueMSP.admin', 'OrgRevenueMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrgRevenueMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('OrgRevenueMSP.peer')"
+
+  - &OrgRegistration
+    Name: OrgRegistrationMSP
+    ID: OrgRegistrationMSP
+    MSPDir: ./organizations/peerOrganizations/registration.landregistry.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrgRegistrationMSP.admin', 'OrgRegistrationMSP.peer', 'OrgRegistrationMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrgRegistrationMSP.admin', 'OrgRegistrationMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrgRegistrationMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('OrgRegistrationMSP.peer')"
+
+  - &OrgBank
+    Name: OrgBankMSP
+    ID: OrgBankMSP
+    MSPDir: ./organizations/peerOrganizations/bank.landregistry.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrgBankMSP.admin', 'OrgBankMSP.peer', 'OrgBankMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrgBankMSP.admin', 'OrgBankMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrgBankMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('OrgBankMSP.peer')"
+
+  - &OrgGovTech
+    Name: OrgGovTechMSP
+    ID: OrgGovTechMSP
+    MSPDir: ./organizations/peerOrganizations/govtech.landregistry.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrgGovTechMSP.admin', 'OrgGovTechMSP.peer', 'OrgGovTechMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrgGovTechMSP.admin', 'OrgGovTechMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrgGovTechMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('OrgGovTechMSP.peer')"
+
+  - &OrgPublicGateway
+    Name: OrgPublicGatewayMSP
+    ID: OrgPublicGatewayMSP
+    MSPDir: ./organizations/peerOrganizations/public.landregistry.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrgPublicGatewayMSP.admin', 'OrgPublicGatewayMSP.peer', 'OrgPublicGatewayMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrgPublicGatewayMSP.admin', 'OrgPublicGatewayMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrgPublicGatewayMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('OrgPublicGatewayMSP.peer')"
+
+  - &OrgAgri
+    Name: OrgAgriMSP
+    ID: OrgAgriMSP
+    MSPDir: ./organizations/peerOrganizations/agri.landregistry.gov.in/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrgAgriMSP.admin', 'OrgAgriMSP.peer', 'OrgAgriMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrgAgriMSP.admin', 'OrgAgriMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrgAgriMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('OrgAgriMSP.peer')"
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_0: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses:
+    - orderer0.orderer.landregistry.gov.in:7050
+    - orderer1.orderer.landregistry.gov.in:7051
+    - orderer2.orderer.landregistry.gov.in:7052
+    - orderer3.orderer.landregistry.gov.in:7053
+    - orderer4.orderer.landregistry.gov.in:7054
+  
+  EtcdRaft:
+    Consenters:
+      - Host: orderer0.orderer.landregistry.gov.in
+        Port: 7050
+        ClientTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer0.orderer.landregistry.gov.in/tls/server.crt
+        ServerTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer0.orderer.landregistry.gov.in/tls/server.crt
+      - Host: orderer1.orderer.landregistry.gov.in
+        Port: 7051
+        ClientTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer1.orderer.landregistry.gov.in/tls/server.crt
+        ServerTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer1.orderer.landregistry.gov.in/tls/server.crt
+      - Host: orderer2.orderer.landregistry.gov.in
+        Port: 7052
+        ClientTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer2.orderer.landregistry.gov.in/tls/server.crt
+        ServerTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer2.orderer.landregistry.gov.in/tls/server.crt
+      - Host: orderer3.orderer.landregistry.gov.in
+        Port: 7053
+        ClientTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer3.orderer.landregistry.gov.in/tls/server.crt
+        ServerTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer3.orderer.landregistry.gov.in/tls/server.crt
+      - Host: orderer4.orderer.landregistry.gov.in
+        Port: 7054
+        ClientTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer4.orderer.landregistry.gov.in/tls/server.crt
+        ServerTLSCert: ./organizations/ordererOrganizations/orderer.landregistry.gov.in/orderers/orderer4.orderer.landregistry.gov.in/tls/server.crt
+  
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 500
+    AbsoluteMaxBytes: 10 MB
+    PreferredMaxBytes: 2 MB
+  
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  LandRegistryOrdererGenesis:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities:
+        <<: *OrdererCapabilities
+    Consortiums:
+      LandRegistryConsortium:
+        Organizations:
+          - *OrgRevenue
+          - *OrgRegistration
+          - *OrgBank
+          - *OrgGovTech
+          - *OrgPublicGateway
+          - *OrgAgri
+  
+  LandMainChannel:
+    Consortium: LandRegistryConsortium
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *OrgRevenue
+        - *OrgRegistration
+        - *OrgBank
+        - *OrgGovTech
+        - *OrgPublicGateway
+        - *OrgAgri
+      Capabilities:
+        <<: *ApplicationCapabilities
+

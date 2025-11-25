@@ -1,0 +1,321 @@
+{
+  "info": {
+    "name": "Land Registry Blockchain API",
+    "description": "API test collection for Land Registry system on Hyperledger Fabric",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000/api/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Public APIs",
+      "item": [
+        {
+          "name": "Get Parcel (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/parcels/MH-MUM-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "parcels", "MH-MUM-001"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ownership History (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/parcels/MH-MUM-001/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "parcels", "MH-MUM-001", "history"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Document Hash",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/verify/MH-MUM-001/hash-doc-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["public", "verify", "MH-MUM-001", "hash-doc-001"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Parcel Management",
+      "item": [
+        {
+          "name": "Create Parcel",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"landId\": \"TEST-001\",\n  \"surveyNumber\": \"999/1\",\n  \"state\": \"TestState\",\n  \"district\": \"TestDistrict\",\n  \"tehsil\": \"TestTehsil\",\n  \"village\": \"TestVillage\",\n  \"pincode\": \"123456\",\n  \"area\": 100,\n  \"areaUnit\": \"SQMT\",\n  \"currentOwner\": \"AADHAAR-9999\",\n  \"currentOwnerName\": \"Test Owner\",\n  \"ownerType\": \"INDIVIDUAL\",\n  \"landType\": \"RESIDENTIAL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parcels",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Parcel by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parcels/MH-MUM-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels", "MH-MUM-001"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Query Parcels by Owner",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parcels/search/owner/AADHAAR-1001",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels", "search", "owner", "AADHAAR-1001"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Query Parcels by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parcels/search/status/ACTIVE",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels", "search", "status", "ACTIVE"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Propose Sale Transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newOwner\": \"AADHAAR-2001\",\n  \"newOwnerName\": \"Buyer Name\",\n  \"registrationNumber\": \"REG-2024-001\",\n  \"consideration\": 5000000,\n  \"stampDuty\": 250000,\n  \"documentHash\": \"hash-sale-deed-001\",\n  \"documentUri\": \"digilocker://sale-deed-001\",\n  \"biometricVerified\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parcels/MH-MUM-001/propose-sale",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels", "MH-MUM-001", "propose-sale"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dispute Management",
+      "item": [
+        {
+          "name": "Raise Dispute",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"disputeId\": \"DISPUTE-001\",\n  \"landId\": \"MH-MUM-001\",\n  \"disputeType\": \"OWNERSHIP\",\n  \"filedBy\": \"AADHAAR-3001\",\n  \"filedByName\": \"Claimant Name\",\n  \"description\": \"Claim of prior ownership with supporting documents\",\n  \"courtCaseId\": \"COURT-2024-001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/disputes",
+              "host": ["{{baseUrl}}"],
+              "path": ["disputes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve Dispute",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolutionDetails\": \"Court ruled in favor of original owner. Dispute dismissed.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/disputes/DISPUTE-001/resolve",
+              "host": ["{{baseUrl}}"],
+              "path": ["disputes", "DISPUTE-001", "resolve"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bank/Mortgage",
+      "item": [
+        {
+          "name": "Create Mortgage",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mortgageId\": \"MTG-002\",\n  \"landId\": \"MH-MUM-001\",\n  \"mortgageType\": \"HOME_LOAN\",\n  \"borrower\": \"AADHAAR-1001\",\n  \"borrowerName\": \"Rajesh Kumar\",\n  \"lenderName\": \"HDFC Bank\",\n  \"loanAmount\": 3000000,\n  \"interestRate\": 8.5,\n  \"loanTenure\": 240\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bank/mortgage",
+              "host": ["{{baseUrl}}"],
+              "path": ["bank", "mortgage"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Close Mortgage",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"closureReason\": \"PAID\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bank/mortgage/MTG-001",
+              "host": ["{{baseUrl}}"],
+              "path": ["bank", "mortgage", "MTG-001"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Encumbrance Certificate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/bank/parcels/MH-MUM-001/encumbrance",
+              "host": ["{{baseUrl}}"],
+              "path": ["bank", "parcels", "MH-MUM-001", "encumbrance"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative Tests",
+      "item": [
+        {
+          "name": "Attempt Double Sale (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newOwner\": \"AADHAAR-9999\",\n  \"newOwnerName\": \"Fraudulent Buyer\",\n  \"registrationNumber\": \"FAKE-REG\",\n  \"consideration\": 1000000,\n  \"stampDuty\": 50000,\n  \"documentHash\": \"fake-hash\",\n  \"documentUri\": \"fake-uri\",\n  \"biometricVerified\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parcels/MH-MUM-001/propose-sale",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels", "MH-MUM-001", "propose-sale"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Transfer Frozen Parcel (Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newOwner\": \"AADHAAR-8888\",\n  \"newOwnerName\": \"Buyer\",\n  \"registrationNumber\": \"REG-001\",\n  \"consideration\": 2000000,\n  \"stampDuty\": 100000,\n  \"documentHash\": \"hash-001\",\n  \"documentUri\": \"uri-001\",\n  \"biometricVerified\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parcels/TEST-FROZEN-001/propose-sale",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels", "TEST-FROZEN-001", "propose-sale"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Non-existent Parcel (Should 404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/parcels/NON-EXISTENT-999",
+              "host": ["{{baseUrl}}"],
+              "path": ["parcels", "NON-EXISTENT-999"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
